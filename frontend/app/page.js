@@ -1,103 +1,169 @@
-import Image from "next/image";
+'use client';
+
+import Navbar from "./components/Navbar";
+import HeroSection from "./components/HeroSection";
+import QuickListingBanner from "./components/QuickListingBanner";
+
+const dummyProducts = [
+  {
+    img: "/images/book.jpg",
+    title: "Engineering Mechanics",
+    price: "₹250",
+  },
+  {
+    img: "/images/dsa.jpg",
+    title: "Data Structures Notes",
+    price: "₹120",
+  },
+  {
+    img: "images/Scientific Calculator.jpg",
+    title: "Scientific Calculator",
+    price: "₹600",
+  },
+  {
+    img: "images/Event Pass - TechFest.jpg",
+    title: "Event Pass - TechFest",
+    price: "₹80",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+    <div>
+      <Navbar />
+      <div style={{ paddingTop: 80 }}>
+        <HeroSection />
+        <QuickListingBanner />
+        {/* Newly Updated Listings Section */}
+        <section className="products-section">
+          <h2>Newly Updated Listings</h2>
+          <div className="products-grid">
+            {dummyProducts.map((p, i) => (
+              <div className="product-card" key={i}>
+                <img src={p.img} alt={p.title} className="product-img" />
+                <div className="product-info">
+                  <div className="product-title">{p.title}</div>
+                  <div className="product-price">{p.price}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+        {/* Footer */}
+        <footer className="footer">
+          <div className="footer-main">Campus Bazaar</div>
+          <div className="footer-tagline">Built by Students, for Students</div>
+          <div className="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Use</a>
+            <a href="#">Contact</a>
+          </div>
+        </footer>
+      </div>
+      <style jsx>{`
+        .products-section {
+          margin: 60px auto 0 auto;
+          max-width: 1100px;
+          padding: 0 5vw;
+        }
+        .products-section h2 {
+          color: #004D47;
+          font-size: 2rem;
+          font-weight: 700;
+          margin-bottom: 32px;
+          font-family: 'Poppins', 'Inter', sans-serif;
+        }
+        .products-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 32px;
+        }
+        .product-card {
+          background: #fff;
+          border-radius: 18px;
+          box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+          padding: 22px 18px 18px 18px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          transition: box-shadow 0.2s, transform 0.2s;
+          cursor: pointer;
+        }
+        .product-card:hover {
+          box-shadow: 0 8px 32px rgba(255,134,94,0.13);
+          transform: translateY(-4px) scale(1.03);
+        }
+        .product-img {
+          width: 110px;
+          height: 110px;
+          object-fit: cover;
+          border-radius: 12px;
+          margin-bottom: 18px;
+          background: #f3f3f3;
+        }
+        .product-info {
+          text-align: center;
+        }
+        .product-title {
+          font-size: 1.08rem;
+          font-weight: 600;
+          color: #004D47;
+          margin-bottom: 6px;
+        }
+        .product-price {
+          color: #FF865E;
+          font-size: 1.1rem;
+          font-weight: 700;
+        }
+        .footer {
+          background: #004D47;
+          color: #fff;
+          margin-top: 70px;
+          padding: 38px 0 24px 0;
+          text-align: center;
+          border-top-left-radius: 32px;
+          border-top-right-radius: 32px;
+        }
+        .footer-main {
+          font-size: 1.5rem;
+          font-weight: 700;
+          letter-spacing: 1px;
+          margin-bottom: 8px;
+        }
+        .footer-tagline {
+          font-size: 1.08rem;
+          margin-bottom: 18px;
+          color: #FF865E;
+        }
+        .footer-links {
+          display: flex;
+          justify-content: center;
+          gap: 32px;
+          font-size: 1rem;
+        }
+        .footer-links a {
+          color: #fff;
+          text-decoration: none;
+          opacity: 0.85;
+          transition: opacity 0.2s;
+        }
+        .footer-links a:hover {
+          opacity: 1;
+          text-decoration: underline;
+        }
+        @media (max-width: 700px) {
+          .products-section h2 {
+            font-size: 1.3rem;
+          }
+          .products-grid {
+            gap: 18px;
+          }
+          .footer {
+            border-radius: 0;
+            padding: 28px 0 16px 0;
+          }
+        }
+      `}</style>
     </div>
   );
 }
