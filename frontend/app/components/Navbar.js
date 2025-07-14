@@ -1,8 +1,10 @@
 'use client';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
   return (
     <nav className="navbar">
       <div className="navbar-content">
@@ -15,7 +17,7 @@ export default function Navbar() {
           <a href="#whatsnew">What's New</a>
         </div>
         <div className="navbar-actions">
-          <button className="btn btn-login">Login</button>
+          <button className="btn btn-login" onClick={() => router.push('/login')}>Login</button>
           <button className="navbar-hamburger" onClick={() => setOpen(!open)}>
             <span />
             <span />
