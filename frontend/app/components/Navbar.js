@@ -18,6 +18,7 @@ export default function Navbar() {
         </div>
         <div className="navbar-actions">
           <button className="btn btn-login" onClick={() => router.push('/login')}>Login</button>
+          <button className="btn btn-register" onClick={() => router.push('/signup')}>Register</button>
           <button className="navbar-hamburger" onClick={() => setOpen(!open)}>
             <span />
             <span />
@@ -100,6 +101,15 @@ export default function Navbar() {
         }
         .btn-login:hover {
           background: #ff6a36;
+        }
+        .btn-register {
+          background: #004D47;
+          color: #fff;
+          border: 2px solid #004D47;
+          box-shadow: 0 2px 8px rgba(0,77,71,0.08);
+        }
+        .btn-register:hover {
+          background: #00332f;
         }
         .navbar-hamburger {
           display: none;
