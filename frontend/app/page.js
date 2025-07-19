@@ -3,50 +3,51 @@
 import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
 import QuickListingBanner from "./components/QuickListingBanner";
-
-const dummyProducts = [
-  {
-    img: "/images/book.jpg",
-    title: "Engineering Mechanics",
-    price: "₹250",
-  },
-  {
-    img: "/images/dsa.jpg",
-    title: "Data Structures Notes",
-    price: "₹120",
-  },
-  {
-    img: "images/Scientific Calculator.jpg",
-    title: "Scientific Calculator",
-    price: "₹600",
-  },
-  {
-    img: "images/Event Pass - TechFest.jpg",
-    title: "Event Pass - TechFest",
-    price: "₹80",
-  },
-];
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const [products, setProducts] = useState([]);
+  const router = useRouter();
+
+  useEffect(() => {
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data) => setProducts(data))
+      .catch(() => setProducts([]));
+  }, []);
+
   return (
     <div>
       <Navbar />
       <div style={{ paddingTop: 80 }}>
         <HeroSection />
+        <div className="flex justify-end max-w-5xl mx-auto px-4 mt-4">
+          <button
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow transition-all duration-200 ease-in-out"
+            onClick={() => router.push('/create-listing')}
+          >
+            + Create a Listing
+          </button>
+        </div>
         <QuickListingBanner />
         {/* Newly Updated Listings Section */}
         <section className="products-section">
           <h2>Newly Updated Listings</h2>
           <div className="products-grid">
-            {dummyProducts.map((p, i) => (
-              <div className="product-card" key={i}>
-                <img src={p.img} alt={p.title} className="product-img" />
-                <div className="product-info">
-                  <div className="product-title">{p.title}</div>
-                  <div className="product-price">{p.price}</div>
+            {products.length === 0 ? (
+              <div className="col-span-full text-center text-gray-400 py-8">No listings yet.</div>
+            ) : (
+              products.map((p, i) => (
+                <div className="product-card" key={p._id || i}>
+                  <img src={p.image || '/images/book.jpg'} alt={p.title} className="product-img" />
+                  <div className="product-info">
+                    <div className="product-title">{p.title}</div>
+                    <div className="product-price">₹{p.price}</div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </section>
         {/* Footer */}
@@ -54,8 +55,8 @@ export default function Home() {
           <div className="footer-main">Campus Bazaar</div>
           <div className="footer-tagline">Built by Students, for Students</div>
           <div className="footer-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Use</a>
+            <a href="/privacypolicy">Privacy Policy</a>
+            <a href="/terms">Terms of Use</a>
             <a href="#">Contact</a>
           </div>
         </footer>

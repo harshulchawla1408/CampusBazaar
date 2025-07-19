@@ -1,12 +1,22 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
   firebaseUid: { type: String, required: true, unique: true },
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  mobile: { type: String },
-  createdAt: { type: Date, default: Date.now },
+  email: { type: String, required: true },
+  displayName: String,
+  photoURL: String,
+  roll: String,
+  phone: String,
+  age: String,
+  gender: String,
+  department: String,
+  branch: String,
+  year: String,
+  semester: String,
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
-const User = mongoose.model("User", userSchema);
-export default User;
+export default mongoose.model('User', userSchema);

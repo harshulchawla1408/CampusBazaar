@@ -1,5 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import toast from "react-hot-toast";
+import { useRouter } from 'next/navigation';
 
 const TABS = ["Personal Info", "Listings", "Notifications", "Settings"];
 
@@ -7,19 +9,22 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState("Personal Info");
   const [profilePic, setProfilePic] = useState(null);
   const [profile, setProfile] = useState({
-    name: "John Doe",
-    email: "john.doe@university.edu",
-    verified: true,
-    roll: "2021001",
-    phone: "9876543210",
-    age: "20",
-    gender: "Male",
-    department: "Engineering",
-    branch: "CSE",
-    year: "2",
-    semester: "4",
+    name: "",
+    email: "",
+    verified: false,
+    roll: "",
+    phone: "",
+    age: "",
+    gender: "",
+    department: "",
+    branch: "",
+    year: "",
+    semester: "",
+    photoURL: "",
   });
-  const [profileProgress, setProfileProgress] = useState(80);
+  const [profileProgress, setProfileProgress] = useState(0);
+  const [saving, setSaving] = useState(false);
+  const router = useRouter();
 
   // Dynamically calculate profile completeness
   useEffect(() => {
@@ -35,34 +40,87 @@ export default function DashboardPage() {
       profile.semester,
     ];
     let filled = requiredFields.filter(Boolean).length;
-    // Optionally count profilePic as well:
-    // if (profilePic) filled++;
     const total = requiredFields.length;
-    setProfileProgress(Math.round((filled / total) * 100));
+    setProfileProgress(total === 0 ? 0 : Math.round((filled / total) * 100));
   }, [profile]);
 
-  // Placeholder listing summary
-  const listingSummary = {
-    posted: 5,
-    purchased: 2,
-    saved: 7,
-  };
-
-  // Placeholder notifications
-  const notifications = [
-    { id: 1, text: "Your notes listing received 3 new views" },
-    { id: 2, text: "Campus Bazaar Fest Clearance sale starts tomorrow!" },
-  ];
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const { getAuth } = await import("firebase/auth");
+      const auth = getAuth();
+      const user = auth.currentUser;
+      const token = user && await user.getIdToken();
+      if (!token) return;
+      const res = await fetch("http://localhost:5000/api/v1/users/me", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setProfile({
+          name: data.displayName || "",
+          email: data.email || "",
+          roll: data.roll || "",
+          phone: data.phone || "",
+          age: data.age || "",
+          gender: data.gender || "",
+          department: data.department || "",
+          branch: data.branch || "",
+          year: data.year || "",
+          semester: data.semester || "",
+          photoURL: data.photoURL || "",
+          verified: true
+        });
+      }
+    };
+    fetchProfile();
+  }, []);
 
   // Handle profile picture upload
   const handleProfilePicChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      setProfilePic(URL.createObjectURL(e.target.files[0]));
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfilePic(reader.result);
+        setProfile((prev) => ({ ...prev, photoURL: reader.result }));
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   // Avatar fallback
-  const avatar = profilePic || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.name)}&background=004D47&color=fff&rounded=true&size=128`;
+  const avatar = profilePic || profile.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.name || "User")}&background=004D47&color=fff&rounded=true&size=128`;
+
+  // Save profile to backend
+  const handleSaveProfile = async () => {
+    setSaving(true);
+    try {
+      const { getAuth } = await import("firebase/auth");
+      const auth = getAuth();
+      const user = auth.currentUser;
+      const token = user && await user.getIdToken();
+      if (!token) {
+        toast.error("You must be logged in to save your profile.");
+        setSaving(false);
+        return;
+      }
+      const res = await fetch("http://localhost:5000/api/v1/users/create-or-update-user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(profile),
+      });
+      if (!res.ok) throw new Error("Failed to save profile");
+      toast.success("Profile saved successfully!");
+      router.push("/");
+    } catch (err) {
+      toast.error("Failed to save profile. Please try again.");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className="dashboard-root">
@@ -110,7 +168,7 @@ export default function DashboardPage() {
                 </div>
                 <span className="profile-progress-value">{profileProgress}%</span>
               </div>
-              <form className="personal-info-form">
+              <form className="personal-info-form" onSubmit={e => { e.preventDefault(); handleSaveProfile(); }}>
                 <div className="form-row">
                   <label>Name</label>
                   <input type="text" value={profile.name} onChange={e => setProfile({ ...profile, name: e.target.value })} />
@@ -130,6 +188,7 @@ export default function DashboardPage() {
                 <div className="form-row">
                   <label>Gender</label>
                   <select value={profile.gender} onChange={e => setProfile({ ...profile, gender: e.target.value })}>
+                    <option value="">Select</option>
                     <option>Male</option>
                     <option>Female</option>
                     <option>Other</option>
@@ -146,6 +205,7 @@ export default function DashboardPage() {
                 <div className="form-row">
                   <label>Year</label>
                   <select value={profile.year} onChange={e => setProfile({ ...profile, year: e.target.value })}>
+                    <option value="">Select</option>
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>
@@ -155,6 +215,7 @@ export default function DashboardPage() {
                 <div className="form-row">
                   <label>Semester</label>
                   <select value={profile.semester} onChange={e => setProfile({ ...profile, semester: e.target.value })}>
+                    <option value="">Select</option>
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>
@@ -169,26 +230,8 @@ export default function DashboardPage() {
                   <label>Profile Picture</label>
                   <input type="file" accept="image/*" onChange={handleProfilePicChange} />
                 </div>
-                <button type="button" className="personal-info-save-btn">Save</button>
+                <button type="submit" className="personal-info-save-btn" disabled={saving}>{saving ? "Saving..." : "Save"}</button>
               </form>
-              {/* Listings Summary */}
-              <div className="dashboard-listing-summary">
-                <div className="listing-card listing-posted">
-                  <span className="listing-icon">✅</span>
-                  <span className="listing-label">Listings Posted</span>
-                  <span className="listing-value">{listingSummary.posted}</span>
-                </div>
-                <div className="listing-card listing-purchased">
-                  <span className="listing-icon">🛒</span>
-                  <span className="listing-label">Items Purchased</span>
-                  <span className="listing-value">{listingSummary.purchased}</span>
-                </div>
-                <div className="listing-card listing-saved">
-                  <span className="listing-icon">📌</span>
-                  <span className="listing-label">Saved Listings</span>
-                  <span className="listing-value">{listingSummary.saved}</span>
-                </div>
-              </div>
             </div>
           )}
           {activeTab === "Listings" && (
@@ -198,11 +241,12 @@ export default function DashboardPage() {
           )}
           {activeTab === "Notifications" && (
             <div className="dashboard-tab-notifications">
-              <ul className="notifications-list">
-                {notifications.map(n => (
-                  <li key={n.id} className="notification-item">{n.text}</li>
-                ))}
-              </ul>
+              <ul className="notifications-list"></ul>
+              <div className="mt-6 text-center">
+                <a href="/changepass" className="text-blue-500 underline hover:text-blue-700 transition-all duration-200 ease-in-out">
+                  Change Password
+                </a>
+              </div>
             </div>
           )}
           {activeTab === "Settings" && (

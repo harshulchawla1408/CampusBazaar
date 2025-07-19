@@ -27,7 +27,17 @@ export default function LoginPage() {
       const user = userCredential.user;
       console.log("Logged in user:", user.email);
       toast.success("Welcome back! You've logged in successfully.");
-      router.push("/dashboard"); 
+      // Sync user to backend
+      const token = await user.getIdToken();
+      await fetch('http://localhost:5000/api/v1/users/create-or-update-user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // Redirect to dashboard
+      router.push("/dashboard");
     } catch (err) {
       console.error(err.message);
       toast.error("Login failed. Please check your credentials and try again.");
