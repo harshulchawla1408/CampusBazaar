@@ -1,22 +1,15 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-  firebaseUid: { type: String, required: true, unique: true },
+  uid: { type: String, required: true, unique: true },
   email: { type: String, required: true },
-  displayName: String,
-  photoURL: String,
-  roll: String,
-  phone: String,
-  age: String,
-  gender: String,
-  department: String,
-  branch: String,
-  year: String,
-  semester: String,
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
+  name: { type: String, required: true },
+  phone: { type: String, required: true },
+  age: { type: Number },
+  department: { type: String },
+  year: { type: String },
+  hostelName: { type: String },
+  profileImage: { type: String }, // base64 or image URL
 });
 
 export default mongoose.model('User', userSchema);

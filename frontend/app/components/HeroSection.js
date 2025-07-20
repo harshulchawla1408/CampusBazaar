@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 const avatars = [
   'https://randomuser.me/api/portraits/men/32.jpg',
@@ -10,6 +11,7 @@ const avatars = [
 ];
 
 export default function HeroSection() {
+  const router = useRouter();
   return (
     <section className="hero-section">
       {/* Left Side */}
@@ -23,7 +25,7 @@ export default function HeroSection() {
           Discover a student-only marketplace for books, gadgets, notes, tickets & more — verified and safe, just for your university.
         </p>
         <div className="hero-ctas">
-          <button className="btn btn-primary">Create a Listing</button>
+          <button className="btn btn-primary" onClick={() => router.push('/create-listing')}>Create a Listing</button>
           <button className="btn btn-secondary">
             <span className="play-icon">▶</span> How It Works
           </button>

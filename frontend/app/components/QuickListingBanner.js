@@ -1,15 +1,17 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function QuickListingBanner() {
+  const router = useRouter();
   return (
     <div className="quick-listing-banner">
       <div className="qlb-content">
         <span className="qlb-icon">+</span>
         <span className="qlb-text">Got something to sell? <b>List it now in 30 seconds!</b></span>
       </div>
-      <button className="qlb-btn">Create a Listing</button>
+      <button className="qlb-btn" onClick={() => router.push('/create-listing')}>Create a Listing</button>
       <style jsx>{`
         .quick-listing-banner {
           margin: 0 auto;

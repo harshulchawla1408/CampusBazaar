@@ -11,7 +11,7 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch("/api/products")
+    fetch("http://localhost:5000/api/products")
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch(() => setProducts([]));
@@ -22,14 +22,6 @@ export default function Home() {
       <Navbar />
       <div style={{ paddingTop: 80 }}>
         <HeroSection />
-        <div className="flex justify-end max-w-5xl mx-auto px-4 mt-4">
-          <button
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow transition-all duration-200 ease-in-out"
-            onClick={() => router.push('/create-listing')}
-          >
-            + Create a Listing
-          </button>
-        </div>
         <QuickListingBanner />
         {/* Newly Updated Listings Section */}
         <section className="products-section">

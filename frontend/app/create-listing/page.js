@@ -8,9 +8,21 @@ export default function CreateListingPage() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
+  const [categoryError, setCategoryError] = useState("");
   const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  const CATEGORIES = [
+    "Study Essentials",
+    "Electronics & Gadgets",
+    "Furniture & Room Items",
+    "Clothing & Accessories",
+    "Kitchen & Appliances",
+    "Travel & Mobility",
+    "Entertainment & Misc",
+    "Others"
+  ];
 
   // Helper to get Firebase token from current user
   async function getToken() {
@@ -34,9 +46,11 @@ export default function CreateListingPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title || !price || !category) {
+      if (!category) setCategoryError("Category is required.");
       toast.error("Title, price, and category are required.");
       return;
     }
+    setCategoryError("");
     setLoading(true);
     try {
       const token = await getToken();
@@ -100,13 +114,16 @@ export default function CreateListingPage() {
           </div>
           <div>
             <label className="block mb-1 font-medium">Category<span className="text-red-500">*</span></label>
-            <input
-              type="text"
+            <select
               className="w-full p-3 rounded-md border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-800 text-gray-900 dark:text-gray-100"
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={e => { setCategory(e.target.value); setCategoryError(""); }}
               required
-            />
+            >
+              <option value="">Select Category</option>
+              {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+            </select>
+            {categoryError && <div className="text-red-500 text-xs mt-1">{categoryError}</div>}
           </div>
           <div>
             <label className="block mb-1 font-medium">Image</label>

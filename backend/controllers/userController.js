@@ -1,52 +1,41 @@
 import User from '../models/User.js';
 
 export const createOrUpdateUser = async (req, res) => {
-  const { uid, email, name, picture } = req.user;
-  // All dashboard fields from body
-  const {
-    displayName,
-    photoURL,
-    roll,
-    phone,
-    age,
-    gender,
-    department,
-    branch,
-    year,
-    semester
-  } = req.body;
+  const { uid, email } = req.user;
+  const { name, phone, age, department, year, hostelName, profileImage } = req.body;
+
+  if (!name || !phone || !email || phone.length !== 10 || isNaN(Number(phone))) {
+    return res.status(400).json({ message: 'Invalid or missing required fields.' });
+  }
+  if (age && age < 16) {
+    return res.status(400).json({ message: 'Age must be at least 16.' });
+  }
 
   try {
-    console.log('createOrUpdateUser req.user:', req.user);
-    console.log('createOrUpdateUser req.body:', req.body);
     const user = await User.findOneAndUpdate(
-      { firebaseUid: uid },
+      { uid },
       {
         email,
-        displayName: displayName || name || '',
-        photoURL: photoURL || picture || '',
-        roll: roll || '',
-        phone: phone || '',
-        age: age || '',
-        gender: gender || '',
-        department: department || '',
-        branch: branch || '',
-        year: year || '',
-        semester: semester || '',
+        name,
+        phone,
+        age,
+        department,
+        year,
+        hostelName,
+        profileImage,
       },
       { new: true, upsert: true }
     );
     res.status(200).json(user);
   } catch (err) {
-    console.error('createOrUpdateUser error:', err);
-    res.status(500).json({ message: err.message, stack: err.stack });
+    res.status(500).json({ message: err.message });
   }
 };
 
 export const getUserProfile = async (req, res) => {
-  const { uid } = req.user;
+  const { uid, email } = req.user;
   try {
-    const user = await User.findOne({ firebaseUid: uid });
+    const user = await User.findOne({ uid }) || await User.findOne({ email });
     if (!user) return res.status(404).json({ message: "User not found" });
     res.status(200).json(user);
   } catch (err) {
