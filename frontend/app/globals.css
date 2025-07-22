@@ -44,6 +44,19 @@ html, body {
   justify-content: center;
 }
 
+.register-bg-container {
+  min-height: 10vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  background: url('/images/register_background.jpg') center center/cover no-repeat;
+  font-family: 'Poppins', 'Inter', 'Nunito', Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .login-overlay {
   position: absolute;
   inset: 0;
@@ -70,8 +83,8 @@ html, body {
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   padding: 2.5rem 2rem 2rem 2rem;
-  max-width: 370px;
-  width: 90vw;
+  max-width: 520px;
+  width: 98vw;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -183,7 +196,8 @@ html, body {
 @media (max-width: 600px) {
   .login-glass-card {
     padding: 1.5rem 0.7rem 1.2rem 0.7rem;
-    max-width: 98vw;
+    max-width: 99vw;
+    width: 99vw;
   }
   .login-title {
     font-size: 1.15rem;

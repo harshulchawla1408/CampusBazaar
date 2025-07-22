@@ -61,7 +61,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="login-bg-container">
+    <div className="register-bg-container">
       <div className="login-overlay" />
       <div className="login-center-container min-h-screen flex items-center justify-center">
         <div className="login-glass-card animate-fade-in-up max-w-lg w-full shadow-lg p-8 transition-all duration-200 ease-in-out">
