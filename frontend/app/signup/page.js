@@ -63,8 +63,8 @@ export default function SignupPage() {
   return (
     <div className="register-bg-container">
       <div className="login-overlay" />
-      <div className="login-center-container min-h-screen flex items-center justify-center">
-        <div className="login-glass-card animate-fade-in-up max-w-lg w-full shadow-lg p-8 transition-all duration-200 ease-in-out">
+      <div className="login-center-container">
+        <div className="login-glass-card">
           <h2 className="login-title">Campus Bazaar Signup</h2>
           <form className="login-form" onSubmit={handleSignup}>
             <label htmlFor="name" className="login-label">Name</label>
@@ -119,14 +119,15 @@ export default function SignupPage() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
-            <button type="submit" className="login-btn transition-all duration-200 ease-in-out">Register</button>
-          </form>
-          <div className="mt-6 text-center text-sm text-gray-400 dark:text-gray-500">
+             <div className="mt-6 text-center text-sm text-gray-400 dark:text-gray-500">
             By signing up, you agree to our
             <a href="/terms" className="text-blue-500 underline hover:text-blue-700 transition-all duration-200 ease-in-out mx-1">Terms & Conditions</a>
             and
             <a href="/privacypolicy" className="text-blue-500 underline hover:text-blue-700 transition-all duration-200 ease-in-out mx-1">Privacy Policy</a>.
           </div>
+            <button type="submit" className="login-btn transition-all duration-200 ease-in-out">Register</button>
+          </form>
+          
           <div className="mt-4 text-center">
             <span className="login-forgot">
               Already have an account?{' '}

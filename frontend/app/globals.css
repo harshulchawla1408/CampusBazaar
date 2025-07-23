@@ -45,17 +45,15 @@ html, body {
 }
 
 .register-bg-container {
-  min-height: 10vh;
-  width: 100vw;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 0;
-  background: url('/images/register_background.jpg') center center/cover no-repeat;
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  background: url('/images/register_background.jpg') center center/cover no-repeat fixed;
   font-family: 'Poppins', 'Inter', 'Nunito', Arial, sans-serif;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .login-overlay {
   position: absolute;
@@ -68,27 +66,35 @@ html, body {
 .login-center-container {
   position: relative;
   z-index: 2;
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 2rem 0;
+  box-sizing: border-box;
+  margin: 0 auto;
 }
 
 .login-glass-card {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 8px 32px 0 rgba(0, 77, 71, 0.15), 0 1.5px 8px 0 rgba(0,0,0,0.08);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  padding: 2.5rem 2rem 2rem 2rem;
+  padding: 2.5rem 2rem;
   max-width: 520px;
-  width: 98vw;
+  width: 90%;
+  margin: 2rem auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   animation: fade-in-up 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  max-height: 90vh;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 .login-logo-wrapper {
@@ -117,7 +123,33 @@ html, body {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: 1rem;
+  max-height: 65vh;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  margin: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+  box-sizing: border-box;
+}
+
+.login-form::-webkit-scrollbar {
+  width: 6px;
+}
+
+.login-form::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 3px;
+}
+
+.login-form::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+/* Ensure the form content is properly contained */
+.login-glass-card > *:not(.login-form) {
+  flex-shrink: 0;
 }
 
 .login-label {
@@ -195,9 +227,9 @@ html, body {
 /* Responsive Design */
 @media (max-width: 600px) {
   .login-glass-card {
-    padding: 1.5rem 0.7rem 1.2rem 0.7rem;
-    max-width: 99vw;
-    width: 99vw;
+    padding: 1.5rem 1rem;
+    width: 95%;
+    margin: 1rem auto;
   }
   .login-title {
     font-size: 1.15rem;
